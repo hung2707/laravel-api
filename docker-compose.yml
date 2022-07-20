@@ -1,0 +1,58 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: '3.1'
+services:
+    redis:
+        image: 'redis:alpine'
+        expose:
+            - "6380"
+
+    db:
+        image: 'mariadb:10.6'
+        restart: always
+        volumes:
+            - './application/mysql/my.cnf:/etc/my.cnf'
+        environment:
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_DATABASE=lara_api
+            - MYSQL_USERNAME=root
+            - MYSQL_PASSWORD=123456
+        ports:
+            - '8083:3306'
+
+    webserver:
+        image: 'nginx:alpine'
+        working_dir: /var/www/html
+        volumes:
+            - './application/html:/var/www/html'
+            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - '80:80'  
+
+    php-fpm:
+        build: phpdocker/php-fpm
+        working_dir: /var/www/html
+        volumes:
+            - './application/html:/var/www/html'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.0/fpm/conf.d/99-overrides.ini'
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: always
+        ports:
+            - 8000:80
+        environment:
+            - PMA_HOST:db
+            - MYSQL_USERNAME:root
+            - MYSQL_ROOT_PASSWORD:123456
+            - UPLOAD_LIMIT=1300M
+        depends_on:
+            - db
+
+volumes:
+    redis:
+    db:
+    webserver:
+    php-fpm:
+    phpmyadmin:

@@ -12,6 +12,7 @@ services:
         image: 'mariadb:10.6'
         restart: always
         volumes:
+            - './application/mysql:/var/lib/mysql'
             - './application/mysql/my.cnf:/etc/my.cnf'
         environment:
             - MYSQL_ROOT_PASSWORD=123456

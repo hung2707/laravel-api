@@ -4,18 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
-use App\Models\Blog;
-
-class BlogController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {
 
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -23,11 +20,10 @@ class BlogController extends Controller
      */
     public function index(): JsonResponse
     {
-        //Get DB
-        $blogs = Blog::all();
+        $Users = User::all();
         return response()->json([
             'status' => 'success',
-            'data' => $blogs
+            'data' => $Users
         ]);
     }
 
@@ -38,7 +34,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //TODO
+        //
     }
 
     /**
@@ -49,14 +45,7 @@ class BlogController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $input = $request->all();
-
-        //insert DB
-        $blog = Blog::create($input);
-        return response()->json([
-            'status' => 'success',
-            'data' => $blog
-        ]);
+        //
     }
 
     /**
@@ -67,11 +56,7 @@ class BlogController extends Controller
      */
     public function show($id)
     {
-        $blog = Blog::find($id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $blog
-        ]);
+        //
     }
 
     /**
@@ -82,11 +67,7 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        $blog = Blog::find($id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $blog
-        ]);
+        //
     }
 
     /**
@@ -96,17 +77,9 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id)
     {
-        $input = $request->all();
-        $blog = Blog::find($id);
-
-        //Update DB
-        $status = $blog->update($input);
-        return response()->json([
-            'status' => $status,
-            'data' => $blog
-        ]);
+        //
     }
 
     /**
@@ -117,12 +90,6 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        $blog = Blog::find($id);
-        $res = $blog->delete();
-
-        return response()->json([
-            'status' => $res,
-            'data' => $blog
-        ]);
+        //
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\User;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     public function __construct()
     {
@@ -21,10 +21,7 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         $Users = User::all();
-        return response()->json([
-            'status' => 'success',
-            'data' => $Users
-        ]);
+        return $this->responseSuccess($Users);
     }
 
     /**

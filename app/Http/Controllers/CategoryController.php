@@ -2,30 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Category;
 use Illuminate\Http\JsonResponse;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-use App\Models\Blog;
-
-class BlogController extends ApiController
+class CategoryController extends ApiController
 {
-    public function __construct()
-    {
-
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index()
     {
         //Get DB
-        $blogs = Blog::all();
-        return $this->responseSuccess($blogs);
+        $categories = Category::all();
+        return $this->responseSuccess($categories);
     }
 
     /**
@@ -35,7 +27,7 @@ class BlogController extends ApiController
      */
     public function create()
     {
-        //TODO
+        //
     }
 
     /**
@@ -44,37 +36,37 @@ class BlogController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $input = $request->all();
 
         //insert DB
-        $blog = Blog::create($input);
-        return $this->responseSuccess($blog);
+        $category = Category::create($input);
+        return $this->responseSuccess($category);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $blog = Blog::find($id);
-        return $this->responseSuccess($blog);
+        $category = Category::find($id);
+        return $this->responseSuccess($category);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $blog = Blog::find($id);
-        return $this->responseSuccess($blog);
+        $category = Category::find($id);
+        return $this->responseSuccess($category);
     }
 
     /**
@@ -87,11 +79,11 @@ class BlogController extends ApiController
     public function update(Request $request, $id): JsonResponse
     {
         $input = $request->all();
-        $blog = Blog::find($id);
+        $category = Category::find($id);
 
         //Update DB
-        if($blog->update($input)) {
-            return $this->responseSuccess($blog);
+        if($category->update($input)) {
+            return $this->responseSuccess($category);
         } else {
             return $this->responseError(500, "Update Fail!");
         }
@@ -105,9 +97,9 @@ class BlogController extends ApiController
      */
     public function destroy($id)
     {
-        $blog = Blog::find($id);
+        $category = Category::find($id);
 
-        if($blog->delete()) {
+        if($category->delete()) {
             return $this->responseSuccess();
         } else {
             return $this->responseError(500, "Update Fail!");

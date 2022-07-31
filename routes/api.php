@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,5 +43,9 @@ Route::group([ 'prefix' => 'auth' ], function ()
 
         //Categories route
         Route::resource('categories', CategoryController::class);
+        Route::post('categories/{id}/update', [CategoryController::class, 'update']);
+
+        Route::resource('tags', TagController::class);
+        Route::post('tags/{id}/update', [TagController::class, 'update']);
     });
 }); // End: Authentication API with Passport

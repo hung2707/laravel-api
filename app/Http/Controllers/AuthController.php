@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
     /**
      * @param Request $request
@@ -21,11 +21,7 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'fails',
-                'message' => $validator->errors()->first(),
-                'errors' => $validator->errors()->toArray(),
-            ]);
+            return $this->responseError(500, $validator->errors()->toArray());
         }
         $user = new User([
             'name' => $request->input('name'),
@@ -33,9 +29,8 @@ class AuthController extends Controller
             'password' => bcrypt($request->input('password'))
         ]);
         $user->save();
-        return response()->json([
-            'status' => 'success',
-        ]);
+
+        return $this->responseSuccess($user);
     }
     /**
      * @param Request $request
@@ -49,18 +44,11 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'fails',
-                'message' => $validator->errors()->first(),
-                'errors' => $validator->errors()->toArray(),
-            ]);
+            return $this->responseError(500, $validator->errors()->toArray());
         }
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'status' => 'fails',
-                'message' => 'Unauthorized'
-            ], 401);
+            return $this->responseError(401, 'Unauthorized');
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -69,8 +57,7 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
         $token->save();
-        return response()->json([
-            'status' => 'success',
+        return $this->responseSuccess([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
@@ -85,9 +72,7 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->token()->revoke();
-        return response()->json([
-            'status' => 'success',
-        ]);
+        return $this->responseSuccess();
     }
     /**
      * @param Request $request
@@ -95,6 +80,6 @@ class AuthController extends Controller
      */
     public function user(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return $this->responseSuccess($request->user());
     }
 }

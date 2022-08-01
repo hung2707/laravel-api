@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Authentication API with Passport
-Route::group([ 'prefix' => 'auth' ], function () 
+Route::group([ 'prefix' => 'auth' ], function ()
 {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
 
-    Route::group([ 'middleware' => 'auth:api' ], function() 
+    Route::group([ 'middleware' => 'auth:api' ], function()
     {
         Route::delete('logout', [AuthController::class, 'logout']);
         Route::get('user', [AuthController::class, 'user']);
@@ -36,7 +38,14 @@ Route::group([ 'prefix' => 'auth' ], function ()
         //Blog route
         Route::resource('blogs', BlogController::class);
 
-        //Blog route
+        //Users route
         Route::resource('users', UserController::class);
+
+        //Categories route
+        Route::resource('categories', CategoryController::class);
+        Route::post('categories/{id}/update', [CategoryController::class, 'update']);
+
+        Route::resource('tags', TagController::class);
+        Route::post('tags/{id}/update', [TagController::class, 'update']);
     });
 }); // End: Authentication API with Passport
